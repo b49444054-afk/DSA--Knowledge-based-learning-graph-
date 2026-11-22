@@ -1,0 +1,106 @@
+{
+  "bigo": [
+    {"q": "What is the time complexity of accessing arr[i] in an array?", "options": ["O(n)", "O(1)", "O(log n)", "O(n^2)"], "answer": 1, "explain": "Arrays use contiguous memory, so the address is computed directly from the index: constant time."},
+    {"q": "Two nested loops, each running n times, give a time complexity of:", "options": ["O(n)", "O(2n)", "O(n^2)", "O(log n)"], "answer": 2, "explain": "n iterations of an inner loop that runs n times gives n * n = O(n^2)."}
+  ],
+  "arrays": [
+    {"q": "Inserting an element at the beginning of an array of n elements costs:", "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"], "answer": 1, "explain": "Every existing element must shift one position to the right."},
+    {"q": "Array elements are stored in:", "options": ["Scattered memory linked by pointers", "Contiguous memory", "A tree structure", "Hash buckets"], "answer": 1, "explain": "Contiguous storage is what gives arrays O(1) indexing."}
+  ],
+  "strings": [
+    {"q": "Strings in Python are:", "options": ["Mutable", "Immutable", "Limited to 256 chars", "Stored as linked lists"], "answer": 1, "explain": "Python strings cannot be modified in place; operations create new strings."},
+    {"q": "Checking whether a string of length n is a palindrome efficiently takes:", "options": ["O(n)", "O(n^2) at minimum", "O(log n)", "O(1)"], "answer": 0, "explain": "Compare characters from both ends with two indices: one pass, O(n)."}
+  ],
+  "recursion": [
+    {"q": "Every correct recursive function needs:", "options": ["A loop", "A base case", "A global variable", "A hand-written stack"], "answer": 1, "explain": "The base case stops the recursion."},
+    {"q": "What happens if a recursive function has no reachable base case?", "options": ["It returns 0", "RecursionError / stack overflow", "The compiler fixes it", "It runs once"], "answer": 1, "explain": "Calls keep stacking until the call stack limit is exceeded."}
+  ],
+  "sorting": [
+    {"q": "Worst-case time complexity of Bubble Sort:", "options": ["O(n)", "O(n log n)", "O(n^2)", "O(log n)"], "answer": 2, "explain": "Up to n passes of up to n comparisons each."},
+    {"q": "Which simple sort is stable and fast on nearly sorted input?", "options": ["Selection sort", "Insertion sort", "Heap sort", "Quick sort"], "answer": 1, "explain": "Insertion sort does very little shifting when data is almost sorted (best case O(n)) and keeps equal elements in order."}
+  ],
+  "binsearch": [
+    {"q": "Binary search requires the data to be:", "options": ["Unique", "Sorted", "Positive", "Stored in a linked list"], "answer": 1, "explain": "Discarding half the range only works if order tells you which half to discard."},
+    {"q": "Time complexity of binary search:", "options": ["O(n)", "O(log n)", "O(1)", "O(n log n)"], "answer": 1, "explain": "The search space halves every step."}
+  ],
+  "linkedlist": [
+    {"q": "Inserting at the head of a singly linked list takes:", "options": ["O(n)", "O(1)", "O(log n)", "O(n^2)"], "answer": 1, "explain": "Create a node, point it to the old head, update head: no shifting."},
+    {"q": "Main drawback of a linked list compared with an array:", "options": ["No O(1) access by index", "Fixed size", "Cannot hold integers", "Slower head insertion"], "answer": 0, "explain": "You must walk from the head to reach the i-th node."}
+  ],
+  "stack": [
+    {"q": "A stack follows which order?", "options": ["FIFO", "LIFO", "Random", "Priority"], "answer": 1, "explain": "Last In, First Out."},
+    {"q": "Which problem is a classic use of a stack?", "options": ["Balanced parentheses check", "Shortest path in a weighted graph", "Binary search", "Resolving hash collisions"], "answer": 0, "explain": "Push opening brackets and pop on closing ones."}
+  ],
+  "queue": [
+    {"q": "A queue follows which order?", "options": ["LIFO", "FIFO", "Sorted order", "Random"], "answer": 1, "explain": "First In, First Out."},
+    {"q": "Which algorithm relies on a queue?", "options": ["Undo operation", "BFS traversal", "Recursion call stack", "Bracket matching"], "answer": 1, "explain": "BFS processes vertices level by level using a FIFO queue."}
+  ],
+  "hashing": [
+    {"q": "Average-case lookup time in a hash table:", "options": ["O(n)", "O(1)", "O(log n)", "O(n log n)"], "answer": 1, "explain": "A good hash function maps keys directly to buckets."},
+    {"q": "Two different keys mapping to the same index is called a:", "options": ["Overflow", "Collision", "Rotation", "Cycle"], "answer": 1, "explain": "Collisions are resolved by chaining or open addressing."}
+  ],
+  "window": [
+    {"q": "Sliding window is best suited for:", "options": ["Contiguous subarray / substring problems", "Tree traversal", "Graph colouring", "Matrix inversion"], "answer": 0, "explain": "The window grows and shrinks over a contiguous range."},
+    {"q": "Finding a pair with a given sum in a sorted array using two pointers takes:", "options": ["O(n^2)", "O(n)", "O(log n)", "O(n^3)"], "answer": 1, "explain": "Each pointer moves at most n steps in total."}
+  ],
+  "advsort": [
+    {"q": "Worst-case time complexity of Merge Sort:", "options": ["O(n^2)", "O(n log n)", "O(n)", "O(log n)"], "answer": 1, "explain": "log n levels of splitting, O(n) merge work per level."},
+    {"q": "Worst-case time complexity of Quick Sort:", "options": ["O(n log n)", "O(n^2)", "O(n)", "O(log n)"], "answer": 1, "explain": "A bad pivot (e.g. always the smallest) gives unbalanced partitions."}
+  ],
+  "trees": [
+    {"q": "Maximum number of nodes in a binary tree of height h (root at height 0)?", "options": ["2h", "2^h", "2^(h+1) - 1", "h^2"], "answer": 2, "explain": "1 + 2 + 4 + ... + 2^h = 2^(h+1) - 1."},
+    {"q": "Inorder traversal visits nodes in the order:", "options": ["Root, Left, Right", "Left, Root, Right", "Left, Right, Root", "Right, Root, Left"], "answer": 1, "explain": "Inorder = Left, Root, Right."}
+  ],
+  "bst": [
+    {"q": "An inorder traversal of a BST produces:", "options": ["Random order", "Sorted ascending order", "Descending order", "Level order"], "answer": 1, "explain": "Left < Root < Right at every node, so inorder gives sorted output."},
+    {"q": "Search in a completely skewed BST with n nodes costs:", "options": ["O(log n)", "O(n)", "O(1)", "O(n log n)"], "answer": 1, "explain": "A skewed BST degenerates into a linked list."}
+  ],
+  "heap": [
+    {"q": "In a min-heap the smallest element is located at:", "options": ["A leaf", "The root", "The middle", "The last index"], "answer": 1, "explain": "The heap property puts the minimum at the root."},
+    {"q": "Building a heap from n elements with bottom-up heapify takes:", "options": ["O(n log n)", "O(n)", "O(log n)", "O(n^2)"], "answer": 1, "explain": "Most nodes are near the leaves and sift down very little; the sum is O(n)."}
+  ],
+  "trie": [
+    {"q": "A trie is best suited for:", "options": ["Prefix search / autocomplete", "Shortest paths", "Sorting numbers", "Matrix multiplication"], "answer": 0, "explain": "Words sharing a prefix share a path from the root."},
+    {"q": "Searching a word of length L in a trie costs:", "options": ["O(n)", "O(L)", "O(L^2)", "O(log n)"], "answer": 1, "explain": "One step per character, independent of the number of stored words."}
+  ],
+  "graphs": [
+    {"q": "Space used by an adjacency list for V vertices and E edges:", "options": ["O(V^2)", "O(V + E)", "O(E^2)", "O(V * E)"], "answer": 1, "explain": "One list per vertex plus one entry per edge."},
+    {"q": "A connected undirected graph with no cycles is called a:", "options": ["Complete graph", "Tree", "Bipartite graph", "Multigraph"], "answer": 1, "explain": "A tree is a connected acyclic undirected graph."}
+  ],
+  "traversal": [
+    {"q": "BFS uses which data structure?", "options": ["Stack", "Queue", "Heap", "Trie"], "answer": 1, "explain": "A FIFO queue gives level-by-level exploration."},
+    {"q": "BFS gives the shortest path (fewest edges) in:", "options": ["Weighted graphs with any weights", "Unweighted graphs", "Only trees", "Only graphs with cycles"], "answer": 1, "explain": "The first time BFS reaches a vertex is via the fewest edges."}
+  ],
+  "backtrack": [
+    {"q": "Backtracking works by:", "options": ["Trying choices and undoing them when they fail", "Sorting then scanning", "Hashing inputs", "Always halving the input"], "answer": 0, "explain": "It explores a decision tree and abandons (prunes) dead ends."},
+    {"q": "Which is a classic backtracking problem?", "options": ["N-Queens", "Binary search", "Heap sort", "Counting sort"], "answer": 0, "explain": "Place a queen, recurse, and remove it if the placement leads nowhere."}
+  ],
+  "greedy": [
+    {"q": "A greedy algorithm picks:", "options": ["The locally best choice at each step", "All options and compares", "A random choice", "Only the first choice"], "answer": 0, "explain": "It never reconsiders earlier decisions."},
+    {"q": "For activity selection, the correct greedy rule is to pick the activity with the:", "options": ["Earliest start", "Earliest finish time", "Longest duration", "Shortest gap"], "answer": 1, "explain": "Finishing earliest leaves the most room for later activities."}
+  ],
+  "dp": [
+    {"q": "Dynamic programming applies when a problem has:", "options": ["Overlapping subproblems and optimal substructure", "Only sorted input", "Only graph input", "No recursion"], "answer": 0, "explain": "Reusing stored subproblem answers is the core idea."},
+    {"q": "Memoization means:", "options": ["Bottom-up tabulation", "Caching results of recursive calls", "Sorting inputs", "Random sampling"], "answer": 1, "explain": "Top-down recursion plus a cache."}
+  ],
+  "dijkstra": [
+    {"q": "Dijkstra's algorithm fails when the graph has:", "options": ["Cycles", "Negative edge weights", "Directed edges", "Few edges"], "answer": 1, "explain": "A finalized distance may later need to decrease if a negative edge exists."},
+    {"q": "Which structure makes Dijkstra efficient?", "options": ["Min-heap / priority queue", "Stack", "Trie", "Plain queue"], "answer": 0, "explain": "It repeatedly extracts the vertex with the smallest tentative distance."}
+  ],
+  "unionfind": [
+    {"q": "Union-Find supports which operations?", "options": ["Find a set's representative and merge sets", "Range minimum query", "Prefix search", "Sorting"], "answer": 0, "explain": "find(x) and union(x, y) on disjoint sets."},
+    {"q": "Which optimizations make Union-Find nearly O(1) per operation?", "options": ["Path compression and union by rank", "Chaining and rehashing", "Rotation and splaying", "Memoization"], "answer": 0, "explain": "They keep the trees extremely shallow."}
+  ],
+  "mst": [
+    {"q": "How many edges does an MST of a connected graph with V vertices have?", "options": ["V", "V - 1", "V + 1", "E"], "answer": 1, "explain": "A spanning tree connects V vertices with V - 1 edges."},
+    {"q": "Kruskal's algorithm uses which structure to avoid cycles?", "options": ["Union-Find", "Queue", "Trie", "Stack"], "answer": 0, "explain": "It adds the cheapest edge only if its endpoints are in different sets."}
+  ],
+  "toposort": [
+    {"q": "Topological sorting is defined for:", "options": ["Any graph", "Directed acyclic graphs (DAGs)", "Undirected graphs", "Complete graphs"], "answer": 1, "explain": "A cycle makes a valid ordering impossible."},
+    {"q": "Which algorithm performs topological sort using in-degrees?", "options": ["Kahn's algorithm", "Kadane's algorithm", "Prim's algorithm", "Z-algorithm"], "answer": 0, "explain": "Repeatedly remove vertices with in-degree 0."}
+  ],
+  "advdp": [
+    {"q": "Number of states in the 0/1 knapsack DP for n items and capacity W:", "options": ["O(n)", "O(n * W)", "O(W)", "O(n^2)"], "answer": 1, "explain": "dp[i][w] for each item index and capacity."},
+    {"q": "Time complexity of the standard LCS DP for strings of lengths m and n:", "options": ["O(m + n)", "O(m * n)", "O(2^n)", "O(log(mn))"], "answer": 1, "explain": "One table cell per pair of prefixes, each computed in O(1)."}
+  ]
+}

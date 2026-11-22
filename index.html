@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DSA Knowledge Graph</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  :root {
+    --bg: #f5f6fa; --card: #ffffff; --text: #1f2937; --muted: #6b7280; --line: #e5e7eb;
+    --green: #34d399; --green-d: #059669; --amber: #fbbf24; --amber-d: #d97706;
+    --gray: #e5e7eb; --gray-d: #9ca3af; --blue: #2563eb;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+  header { background: var(--card); border-bottom: 1px solid var(--line); padding: 10px 18px;
+           display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  header h1 { font-size: 17px; margin: 0; }
+  .progress-wrap { flex: 1; min-width: 200px; max-width: 360px; }
+  .progress-label { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .bar > div { height: 100%; background: var(--green-d); width: 0; transition: width .4s; }
+  .legend { display: flex; gap: 12px; font-size: 12px; color: var(--muted); }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 3px;
+                         margin-right: 5px; vertical-align: -1px; border: 2px solid; }
+  .lg-m::before { background: var(--green); border-color: var(--green-d); }
+  .lg-p::before { background: var(--amber); border-color: var(--amber-d); }
+  .lg-l::before { background: var(--gray); border-color: var(--gray-d); }
+  .lg-r::before { background: #fff; border-color: var(--blue); }
+  .spacer { flex: 1; }
+  select, button { font: inherit; font-size: 13px; }
+  select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; max-width: 200px; }
+  button { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+  button:hover:not(:disabled) { background: #f3f4f6; }
+  button.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+  button.primary:hover:not(:disabled) { background: #1d4ed8; }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  main { flex: 1; display: flex; min-height: 0; }
+  #network { flex: 1; background: var(--card); margin: 12px 0 12px 12px; border: 1px solid var(--line); border-radius: 12px; }
+  aside { width: 340px; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 10px; }
+  .rec { padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 8px; cursor: pointer; }
+  .rec:hover { border-color: var(--blue); }
+  .rec b { font-size: 14px; }
+  .rec p { margin: 4px 0 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .tag { font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 2px 6px; border-radius: 99px; margin-right: 6px; }
+  .tag.learn { background: #dbeafe; color: #1d4ed8; }
+  .tag.revise { background: #fef3c7; color: #b45309; }
+  .tag.retry { background: #fee2e2; color: #b91c1c; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+  .badge.mastered { background: #d1fae5; color: #047857; }
+  .badge.in_progress { background: #fef3c7; color: #b45309; }
+  .badge.locked { background: #e5e7eb; color: #4b5563; }
+  .detail h3 { margin: 0 0 6px; font-size: 17px; }
+  .detail p { font-size: 13px; line-height: 1.5; color: #374151; }
+  .meta { font-size: 12px; color: var(--muted); margin: 6px 0; }
+  ul.plain { padding-left: 18px; margin: 6px 0; font-size: 13px; }
+  .row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .muted { color: var(--muted); font-size: 13px; }
+  ol.path { padding-left: 20px; margin: 6px 0; font-size: 13px; line-height: 1.7; }
+  /* quiz modal */
+  #overlay { position: fixed; inset: 0; background: rgba(15,23,42,.5); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+  #overlay.open { display: flex; }
+  .modal { background: #fff; border-radius: 14px; width: 560px; max-width: 100%; max-height: 90vh; overflow-y: auto; padding: 22px; }
+  .modal h2 { margin: 0 0 14px; font-size: 18px; }
+  .q { margin-bottom: 16px; }
+  .q p { font-weight: 600; font-size: 14px; margin: 0 0 8px; }
+  .opt { display: block; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 6px; font-size: 14px; cursor: pointer; }
+  .opt:hover { border-color: var(--blue); }
+  .opt input { margin-right: 8px; }
+  .result { padding: 12px; border-radius: 10px; margin-bottom: 14px; font-size: 14px; line-height: 1.5; }
+  .result.pass { background: #d1fae5; } .result.fail { background: #fee2e2; }
+  .review { font-size: 13px; padding: 8px 0; border-top: 1px solid var(--line); }
+  .review.ok::before { content: "Correct. "; color: #047857; font-weight: 700; }
+  .review.bad::before { content: "Incorrect. "; color: #b91c1c; font-weight: 700; }
+  @media (max-width: 800px) { main { flex-direction: column; } aside { width: auto; } #network { min-height: 420px; margin: 12px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>DSA Knowledge Graph</h1>
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel">Loading...</div>
+    <div class="bar"><div id="progressBar"></div></div>
+  </div>
+  <div class="legend">
+    <span class="lg-m">Mastered</span><span class="lg-p">In progress</span>
+    <span class="lg-l">Locked</span><span class="lg-r">Recommended</span>
+  </div>
+  <div class="spacer"></div>
+  <select id="targetSelect"><option value="">Plan a path to...</option></select>
+  <button id="resetBtn">Reset progress</button>
+</header>
+
+<main>
+  <div id="network"></div>
+  <aside>
+    <div class="card"><h2>Recommended next</h2><div id="recs" class="muted">Loading...</div></div>
+    <div class="card detail" id="detail"><h2>Topic details</h2><div class="muted">Click a node in the graph.</div></div>
+    <div class="card" id="pathCard" style="display:none"><h2>Learning path</h2><div id="pathBody"></div></div>
+  </aside>
+</main>
+
+<div id="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+const STYLE = {
+  mastered:    { background: "#34d399", border: "#059669", font: "#064e3b" },
+  in_progress: { background: "#fbbf24", border: "#d97706", font: "#451a03" },
+  locked:      { background: "#e5e7eb", border: "#9ca3af", font: "#6b7280" },
+};
+
+let network = null, nodesDS = null, edgesDS = null;
+let graph = null, recIds = new Set(), pathIds = new Set(), selectedId = null;
+
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  return r.json();
+}
+const pct = x => Math.round(x * 100);
+const stars = n => "★".repeat(n) + "☆".repeat(5 - n);
+const nodeById = id => graph.nodes.find(n => n.id === id);
+
+/* ------------------------------ data loading ------------------------------ */
+async function refresh() {
+  graph = await api("/api/graph");
+  const r = await api("/api/recommendations");
+  recIds = new Set(r.recommendations.map(x => x.id));
+  drawGraph();
+  drawHeader();
+  drawRecs(r);
+  drawDetail();
+  fillTargets();
+}
+
+/* ------------------------------ graph drawing ----------------------------- */
+function visNode(n) {
+  const s = STYLE[n.status];
+  const recommended = recIds.has(n.id);
+  const onPath = pathIds.has(n.id);
+  return {
+    id: n.id, level: n.level, shape: "box",
+    label: n.label + (n.attempts ? "\n" + pct(n.mastery) + "%" : ""),
+    color: { background: s.background, border: recommended ? "#2563eb" : (onPath ? "#7c3aed" : s.border),
+             highlight: { background: s.background, border: "#111827" } },
+    borderWidth: recommended || onPath ? 4 : 2,
+    font: { color: s.font, size: 14, face: "system-ui" },
+    margin: 10, shapeProperties: { borderRadius: 8 },
+  };
+}
+
+function visEdge(e) {
+  const hot = pathIds.has(e.from) && pathIds.has(e.to);
+  return { id: e.from + ">" + e.to, from: e.from, to: e.to, arrows: "to",
+           color: { color: hot ? "#7c3aed" : "#9ca3af" }, width: hot ? 3 : 1.2,
+           smooth: { type: "cubicBezier", forceDirection: "vertical" } };
+}
+
+function drawGraph() {
+  const nodes = graph.nodes.map(visNode);
+  const edges = graph.edges.map(visEdge);
+  if (!network) {
+    nodesDS = new vis.DataSet(nodes);
+    edgesDS = new vis.DataSet(edges);
+    network = new vis.Network(document.getElementById("network"),
+      { nodes: nodesDS, edges: edgesDS },
+      { layout: { hierarchical: { enabled: true, direction: "UD", levelSeparation: 100,
+                                  nodeSpacing: 150, sortMethod: "directed" } },
+        physics: false,
+        interaction: { hover: true, tooltipDelay: 200 } });
+    network.on("click", p => {
+      selectedId = p.nodes.length ? p.nodes[0] : null;
+      drawDetail();
+    });
+  } else {
+    nodesDS.update(nodes);
+    edgesDS.update(edges);
+  }
+}
+
+/* -------------------------------- side panels ------------------------------ */
+function drawHeader() {
+  const s = graph.stats;
+  document.getElementById("progressLabel").textContent =
+    `${s.mastered}/${s.total} topics mastered (${s.percent}%) · ${s.in_progress} in progress · ${s.locked} locked`;
+  document.getElementById("progressBar").style.width = s.percent + "%";
+}
+
+function drawRecs(r) {
+  const el = document.getElementById("recs");
+  if (!r.recommendations.length) {
+    el.textContent = r.message || "Nothing to recommend right now.";
+    return;
+  }
+  el.innerHTML = r.recommendations.map(x => `
+    <div class="rec" data-id="${x.id}">
+      <span class="tag ${x.type}">${x.type}</span><b>${x.label}</b>
+      <p>${x.reason}</p>
+    </div>`).join("");
+  el.querySelectorAll(".rec").forEach(div => div.onclick = () => selectNode(div.dataset.id));
+}
+
+function selectNode(id) {
+  selectedId = id;
+  network.selectNodes([id]);
+  network.focus(id, { scale: 1, animation: true });
+  drawDetail();
+}
+
+function drawDetail() {
+  const el = document.getElementById("detail");
+  if (!selectedId) { el.innerHTML = '<h2>Topic details</h2><div class="muted">Click a node in the graph.</div>'; return; }
+  const n = nodeById(selectedId);
+  const pres = n.prereqs.length
+    ? "<ul class='plain'>" + n.prereqs.map(p => {
+        const pn = nodeById(p);
+        return `<li>${pn.label} <span class="badge ${pn.status}">${pn.status.replace("_", " ")}</span></li>`;
+      }).join("") + "</ul>"
+    : "<div class='muted'>None. This is a starting topic.</div>";
+  el.innerHTML = `
+    <h2>Topic details</h2>
+    <h3>${n.label}</h3>
+    <span class="badge ${n.status}">${n.status.replace("_", " ")}</span>
+    <p>${n.description}</p>
+    <div class="meta">Difficulty ${stars(n.difficulty)} · about ${n.hours} h</div>
+    <div class="meta">Mastery: ${n.attempts ? pct(n.mastery) + "% (" + n.attempts + " attempt" + (n.attempts > 1 ? "s" : "") + ")" : "not attempted"}</div>
+    <div class="meta"><b>Prerequisites</b></div>${pres}
+    <div class="row">
+      <button class="primary" id="quizBtn" ${n.status === "locked" ? "disabled" : ""}>
+        ${n.status === "locked" ? "Locked" : (n.attempts ? "Retake quiz" : "Take quiz")}</button>
+      <button id="pathBtn">Path to this topic</button>
+    </div>`;
+  document.getElementById("quizBtn").onclick = () => openQuiz(n.id);
+  document.getElementById("pathBtn").onclick = () => showPath(n.id);
+}
+
+function fillTargets() {
+  const sel = document.getElementById("targetSelect");
+  if (sel.options.length > 1) return;
+  graph.nodes.forEach(n => sel.add(new Option(n.label, n.id)));
+}
+
+async function showPath(id) {
+  document.getElementById("targetSelect").value = id;
+  const p = await api("/api/path/" + id);
+  pathIds = new Set(p.steps.map(s => s.id));
+  const card = document.getElementById("pathCard");
+  card.style.display = "block";
+  document.getElementById("pathBody").innerHTML = p.steps.length
+    ? `<ol class="path">${p.steps.map(s => `<li>${s.label} <span class="muted">(${s.hours} h)</span></li>`).join("")}</ol>
+       <div class="muted">Total remaining: about ${p.total_hours} h</div>`
+    : "<div class='muted'>You already mastered everything on this path.</div>";
+  drawGraph();
+}
+
+/* ---------------------------------- quiz ---------------------------------- */
+const overlay = document.getElementById("overlay"), modal = document.getElementById("modal");
+
+async function openQuiz(id) {
+  const data = await api("/api/quiz/" + id);
+  if (data.error) { alert(data.error); return; }
+  modal.innerHTML = `<h2>Quiz: ${data.label}</h2>` +
+    data.questions.map((q, i) => `
+      <div class="q"><p>${i + 1}. ${q.q}</p>
+      ${q.options.map((o, j) => `<label class="opt"><input type="radio" name="q${i}" value="${j}">${o}</label>`).join("")}
+      </div>`).join("") +
+    `<div class="row"><button class="primary" id="submitQuiz">Submit</button><button id="cancelQuiz">Cancel</button></div>`;
+  overlay.classList.add("open");
+  document.getElementById("cancelQuiz").onclick = closeModal;
+  document.getElementById("submitQuiz").onclick = () => submitQuiz(id, data.questions.length);
+}
+
+async function submitQuiz(id, count) {
+  const answers = [];
+  for (let i = 0; i < count; i++) {
+    const c = modal.querySelector(`input[name=q${i}]:checked`);
+    if (!c) { alert("Please answer every question."); return; }
+    answers.push(parseInt(c.value));
+  }
+  const res = await api("/api/quiz/" + id, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answers })
+  });
+  if (res.error) { alert(res.error); return; }
+  const passed = res.status === "mastered";
+  modal.innerHTML = `
+    <h2>Result</h2>
+    <div class="result ${passed ? "pass" : "fail"}">
+      You scored ${res.correct}/${res.total} (${pct(res.score)}%). Mastery is now ${pct(res.mastery)}%.<br>
+      ${passed ? "<b>Topic mastered!</b>" : "Not mastered yet. You need 70% mastery. Review and try again."}
+      ${res.newly_unlocked.length ? "<br><b>Unlocked:</b> " + res.newly_unlocked.join(", ") : ""}
+    </div>` +
+    res.review.map((r, i) => `<div class="review ${r.correct ? "ok" : "bad"}">Q${i + 1}. Answer: ${r.right_answer}. ${r.explain}</div>`).join("") +
+    `<div class="row"><button class="primary" id="doneBtn">Done</button></div>`;
+  document.getElementById("doneBtn").onclick = async () => { closeModal(); await refresh(); };
+}
+
+function closeModal() { overlay.classList.remove("open"); }
+overlay.onclick = e => { if (e.target === overlay) closeModal(); };
+
+/* ------------------------------- header actions ---------------------------- */
+document.getElementById("targetSelect").onchange = e => {
+  if (e.target.value) { showPath(e.target.value); }
+  else { pathIds = new Set(); document.getElementById("pathCard").style.display = "none"; drawGraph(); }
+};
+document.getElementById("resetBtn").onclick = async () => {
+  if (!confirm("Erase all progress?")) return;
+  await api("/api/reset", { method: "POST" });
+  pathIds = new Set(); selectedId = null;
+  document.getElementById("pathCard").style.display = "none";
+  document.getElementById("targetSelect").value = "";
+  await refresh();
+};
+
+refresh();
+</script>
+</body>
+</html>

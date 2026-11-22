@@ -1,0 +1,158 @@
+{
+  "bigo": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "arrays": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "strings": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "recursion": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "sorting": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "binsearch": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "linkedlist": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "stack": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "queue": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "hashing": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "window": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "advsort": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "trees": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "bst": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "heap": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "trie": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "graphs": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "traversal": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "backtrack": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "greedy": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "dp": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "dijkstra": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "unionfind": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "mst": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "toposort": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  },
+  "advdp": {
+    "mastery": 0.0,
+    "attempts": 0,
+    "last_score": null,
+    "history": []
+  }
+}
